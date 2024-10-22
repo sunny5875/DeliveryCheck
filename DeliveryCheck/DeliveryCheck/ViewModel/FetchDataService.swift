@@ -57,8 +57,10 @@ final class FetchDataService {
             do {
                 let json = try JSONDecoder().decode(Response.self, from: data)
                 print(json)
-                item.state = json.data.track.lastEvent.status.code
-                WidgetCenter.shared.reloadAllTimelines()
+                if item.state !=  json.data.track.lastEvent.status.code {
+                    item.state = json.data.track.lastEvent.status.code
+                    WidgetCenter.shared.reloadAllTimelines()
+                }
             } catch {
                 print("Error parsing JSON response: \(error.localizedDescription)")
                 throw error

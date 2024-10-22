@@ -297,10 +297,10 @@
 				};
 			};
 			buildConfigurationList = D656D8762CC779EA00F843BA /* Build configuration list for PBXProject "DeliveryCheck" */;
-			developmentRegion = en;
+			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
+				ko,
 				Base,
 			);
 			mainGroup = D656D8722CC779EA00F843BA;
@@ -527,9 +527,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DeliveryCheck/Preview Content\"";
-				DEVELOPMENT_TEAM = 8AX6CPZA8P;
+				DEVELOPMENT_TEAM = 2YJXRFH75A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "배송췌크";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -540,7 +541,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sunny.DeliveryCheck;
+				PRODUCT_BUNDLE_IDENTIFIER = com.subin.deliveryCheck;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -557,9 +558,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DeliveryCheck/Preview Content\"";
-				DEVELOPMENT_TEAM = 8AX6CPZA8P;
+				DEVELOPMENT_TEAM = 2YJXRFH75A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "배송췌크";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -570,7 +572,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sunny.DeliveryCheck;
+				PRODUCT_BUNDLE_IDENTIFIER = com.subin.deliveryCheck;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -584,11 +586,11 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8AX6CPZA8P;
+				DEVELOPMENT_TEAM = 2YJXRFH75A;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sunny.DeliveryCheckTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.subinDeliveryCheckTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -603,11 +605,11 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8AX6CPZA8P;
+				DEVELOPMENT_TEAM = 2YJXRFH75A;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sunny.DeliveryCheckTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.subinDeliveryCheckTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -658,10 +660,10 @@
 				CODE_SIGN_ENTITLEMENTS = DeliveryCheckWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8AX6CPZA8P;
+				DEVELOPMENT_TEAM = 2YJXRFH75A;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeliveryCheckWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = DeliveryCheckWidget;
+				INFOPLIST_KEY_CFBundleDisplayName = "배송췌크위젯";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -669,7 +671,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sunny.DeliveryCheck.DeliveryCheckWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.subin.deliveryCheck.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -690,10 +692,10 @@
 				CODE_SIGN_ENTITLEMENTS = DeliveryCheckWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8AX6CPZA8P;
+				DEVELOPMENT_TEAM = 2YJXRFH75A;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeliveryCheckWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = DeliveryCheckWidget;
+				INFOPLIST_KEY_CFBundleDisplayName = "배송췌크위젯";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -701,7 +703,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sunny.DeliveryCheck.DeliveryCheckWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.subin.deliveryCheck.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

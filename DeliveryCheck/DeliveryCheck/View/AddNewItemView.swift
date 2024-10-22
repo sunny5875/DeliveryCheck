@@ -9,7 +9,8 @@ import SwiftUI
 
 struct AddNewItemView: View {
     
-    @State private var newItem: Item = .init(carrierId: DeliveryCompany.cjlogistics.rawValue, state: "", trackingNumber: "")
+    @State private var deliveryCompany = DeliveryCompany.cjlogistics
+    @State private var newItem: Item = .init(name: "", carrierCompany: "", carrierId: DeliveryCompany.cjlogistics.rawValue, state: "", trackingNumber: "")
     
     private let onAdd: (Item) -> ()
     
@@ -20,24 +21,29 @@ struct AddNewItemView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section("배송사를 선택하세요") {
-                    Picker(newItem.carrierId, selection: $newItem.carrierId) {
+                Section("물품명") {
+                    TextField("물품명을 입력하세요", text: $newItem.name)
+                }
+                
+                Section("배송사") {
+                    Picker(deliveryCompany.name, selection: $deliveryCompany) {
                         ForEach(DeliveryCompany.allCases, id: \.self) { item in
-                            VStack {
-                                Text(item.name)
-                                Text(item.tel ?? "-")
-                            }
+                            Text(item.name)
                         }
                     }
                 }
                 
-                TextField("운송장번호를 입력하세요", text: $newItem.trackingNumber)
+                Section("운송장 번호") {
+                    TextField("운송장번호를 입력하세요", text: $newItem.trackingNumber)
+                }
             }.toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
+                        newItem.carrierId = deliveryCompany.rawValue
+                        newItem.carrierCompany = deliveryCompany.name
                         onAdd(newItem)
                     }, label: {
-                        Text("추가")
+                        Text("완료")
                     })
                 }
             }

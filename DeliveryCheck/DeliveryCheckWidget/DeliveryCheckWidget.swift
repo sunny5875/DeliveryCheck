@@ -47,22 +47,37 @@ struct DeliveryCheckWidgetEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("배송췌크")
-                    .font(.headline)
+        VStack(alignment: .leading, spacing: 16) {
+            Text("\((items.count))")
+                .font(.headline)
+            +
+            Text("개의 배송췌크")
+                .font(.caption)
+           
+            HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("👀 배송준비중: \(items.filter { $0.statusTitle == "배송 준비중"}.count)개")
+                    Text("👀 준비중")
                         .font(.caption)
-                    Text("🛫 배송시작: \(items.filter { $0.statusTitle == "배송 시작"}.count)개")
+                    Text("🛫 시작")
                         .font(.caption)
-                    Text("🚀 배송중: \(items.filter { $0.statusTitle == "배송 중"}.count)개")
+                    Text("🚀 진행중")
                         .font(.caption)
-                    Text("🎁 배송완료: \(items.filter { $0.statusTitle == "배송 완료"}.count)개")
+                    Text("🎁 완료")
                         .font(.caption)
                 }
+                Spacer()
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("\(items.filter { $0.statusTitle == "배송 준비중"}.count)개")
+                        .font(.caption)
+                    Text("\(items.filter { $0.statusTitle == "배송 시작"}.count)개")
+                        .font(.caption)
+                    Text("\(items.filter { $0.statusTitle == "배송 중"}.count)개")
+                        .font(.caption)
+                    Text("\(items.filter { $0.statusTitle == "배송 완료"}.count)개")
+                        .font(.caption)
+                }
+                .foregroundStyle(Color.blue)
             }
-            Spacer()
         }
         .containerBackground(for: .widget) { }
     }

@@ -12,7 +12,7 @@ import WidgetKit
 struct DeliveryCheckWidgetControl: ControlWidget {
     var body: some ControlWidgetConfiguration {
         StaticControlConfiguration(
-            kind: "com.sunny.DeliveryCheck.DeliveryCheckWidget",
+            kind: "com.subin.deliveryCheckWidget",
             provider: Provider()
         ) { value in
             ControlWidgetToggle(

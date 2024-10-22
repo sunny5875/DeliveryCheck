@@ -24,19 +24,31 @@ struct ContentView: View {
                     } label: {
                         HStack {
                             VStack(alignment: .leading) {
-                                Text(DeliveryCompany(rawValue: item.carrierId)?.name ?? item.carrierId)
-                                Text("운송장번호: " + item.trackingNumber)
-                                    .font(.caption)
+                                VStack(alignment: .leading) {
+                                    Text(item.name)
+                                    Text("운송장번호: \(item.trackingNumber)(\(item.carrierCompany))")
+                                        .font(.caption)
+                                }
                             }
                             Spacer()
                             Text(item.statusTitle)
-                                .foregroundStyle(.blue)
+                                .foregroundStyle(.white)
                                 .font(.caption)
+                                .padding(8)
+                                .background(Color.black)
+                                .cornerRadius(4)
                         }
                     }
                 }
                 .onDelete(perform: deleteItems)
-                
+            }
+            .refreshable {
+                for item in items {
+                    try? await service.fetchStatus(item: item)
+                }
+            }
+            .onDisappear {
+                try? modelContext.save()
             }
             .navigationTitle("택배췌크")
             .task {
@@ -66,6 +78,7 @@ struct ContentView: View {
     private func addItem(new: Item) {
         withAnimation {
             modelContext.insert(new)
+            try? modelContext.save()
             WidgetCenter.shared.reloadAllTimelines()
         }
     }
@@ -74,6 +87,7 @@ struct ContentView: View {
         withAnimation {
             for index in offsets {
                 modelContext.delete(items[index])
+                try? modelContext.save()
                 WidgetCenter.shared.reloadAllTimelines()
             }
         }
