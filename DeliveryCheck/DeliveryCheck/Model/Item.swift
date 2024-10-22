@@ -25,9 +25,10 @@ final class Item {
 extension Item {
     var statusTitle: String {
         switch state {
-        case "IN_TRANSIT": "배송중"
+        case "AT_PICKUP": "배송 시작"
+        case "IN_TRANSIT": "배송 중"
         case "OUT_FOR_DELIVERY": "배송 완료"
-        default: "배송준비중"
+        default: "배송 준비중"
         }
     }
 }

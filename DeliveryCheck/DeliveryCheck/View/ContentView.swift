@@ -7,11 +7,13 @@
 
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 struct ContentView: View {
     @Query var items: [Item]
     @Environment(\.modelContext) var modelContext
     @State private var isAdd = false
+    private let service = FetchDataService()
 
     var body: some View {
         NavigationView {
@@ -39,7 +41,7 @@ struct ContentView: View {
             .navigationTitle("택배췌크")
             .task {
                 for item in items {
-                    try? await fetchStatus(item: item)
+                    try? await service.fetchStatus(item: item)
                 }
             }
             .toolbar {
@@ -64,6 +66,7 @@ struct ContentView: View {
     private func addItem(new: Item) {
         withAnimation {
             modelContext.insert(new)
+            WidgetCenter.shared.reloadAllTimelines()
         }
     }
 
@@ -71,62 +74,9 @@ struct ContentView: View {
         withAnimation {
             for index in offsets {
                 modelContext.delete(items[index])
+                WidgetCenter.shared.reloadAllTimelines()
             }
         }
     }
     
-    private func fetchStatus(item: Item) async throws {
-        var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "apis.tracker.delivery"
-        urlComponents.path = "/graphql"
-        guard let url = urlComponents.url else { return }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("TRACKQL-API-KEY 45458ld9m1fv5m12m660qs0jad:b808nhsv4va953s95k4r56hq86b45j6hcitch9f9n3rqg6ug2tn", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-
-
-        let body = [
-            "query": """
-                   query Track($carrierId: ID!, $trackingNumber: String!) {
-                       track(carrierId: $carrierId, trackingNumber: $trackingNumber) {
-                           lastEvent {
-                               time
-                               status {
-                                   code
-                               }
-                           }
-                       }
-                   }
-                   """,
-             "variables": [
-                 "carrierId": item.carrierId,
-                 "trackingNumber": item.trackingNumber
-             ]
-        ] as [String: Any]
-
-        request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
-        
-        let sessionConfig = URLSessionConfiguration.default
-        sessionConfig.timeoutIntervalForRequest = 60
-        let session = URLSession(configuration: sessionConfig)
-
-        let (data, response) = try await session.data(for: request)
-        
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-            do {
-                let json = try JSONDecoder().decode(Response.self, from: data)
-                print(json)
-                item.state = json.data.track.lastEvent.status.code
-            } catch {
-                print("Error parsing JSON response: \(error.localizedDescription)")
-                throw error
-            }
-        } else {
-            print("Server responded with error. Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1)")
-        }
-    }
 }

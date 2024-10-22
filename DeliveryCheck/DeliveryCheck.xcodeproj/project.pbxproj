@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D656D8FC2CC7965500F843BA /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D656D8B02CC77A3F00F843BA /* WidgetKit.framework */; };
+		D656D8FD2CC7965500F843BA /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D656D8B22CC77A4000F843BA /* SwiftUI.framework */; };
+		D656D90C2CC7965600F843BA /* DeliveryCheckWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D656D8FB2CC7965500F843BA /* DeliveryCheckWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		D656D88E2CC779EC00F843BA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,6 +27,13 @@
 			remoteGlobalIDString = D656D87A2CC779EB00F843BA;
 			remoteInfo = DeliveryCheck;
 		};
+		D656D90A2CC7965600F843BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D656D8732CC779EA00F843BA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D656D8FA2CC7965500F843BA;
+			remoteInfo = DeliveryCheckWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,6 +43,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				D656D90C2CC7965600F843BA /* DeliveryCheckWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -42,11 +56,35 @@
 		D656D8972CC779EC00F843BA /* DeliveryCheckUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DeliveryCheckUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D656D8B02CC77A3F00F843BA /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		D656D8B22CC77A4000F843BA /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		D656D8FB2CC7965500F843BA /* DeliveryCheckWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DeliveryCheckWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D656D9122CC796A100F843BA /* DeliveryCheckWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DeliveryCheckWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D656D90F2CC7965600F843BA /* Exceptions for "DeliveryCheckWidget" folder in "DeliveryCheckWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D656D8FA2CC7965500F843BA /* DeliveryCheckWidgetExtension */;
+		};
+		D656D9142CC797EE00F843BA /* Exceptions for "DeliveryCheck" folder in "DeliveryCheckWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/Item.swift,
+				Model/Response.swift,
+				ViewModel/FetchDataService.swift,
+			);
+			target = D656D8FA2CC7965500F843BA /* DeliveryCheckWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D656D87D2CC779EB00F843BA /* DeliveryCheck */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D656D9142CC797EE00F843BA /* Exceptions for "DeliveryCheck" folder in "DeliveryCheckWidgetExtension" target */,
+			);
 			path = DeliveryCheck;
 			sourceTree = "<group>";
 		};
@@ -58,6 +96,14 @@
 		D656D89A2CC779EC00F843BA /* DeliveryCheckUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = DeliveryCheckUITests;
+			sourceTree = "<group>";
+		};
+		D656D8FE2CC7965500F843BA /* DeliveryCheckWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D656D90F2CC7965600F843BA /* Exceptions for "DeliveryCheckWidget" folder in "DeliveryCheckWidgetExtension" target */,
+			);
+			path = DeliveryCheckWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -84,15 +130,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D656D8F82CC7965500F843BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D656D8FD2CC7965500F843BA /* SwiftUI.framework in Frameworks */,
+				D656D8FC2CC7965500F843BA /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		D656D8722CC779EA00F843BA = {
 			isa = PBXGroup;
 			children = (
+				D656D9122CC796A100F843BA /* DeliveryCheckWidgetExtension.entitlements */,
 				D656D87D2CC779EB00F843BA /* DeliveryCheck */,
 				D656D8902CC779EC00F843BA /* DeliveryCheckTests */,
 				D656D89A2CC779EC00F843BA /* DeliveryCheckUITests */,
+				D656D8FE2CC7965500F843BA /* DeliveryCheckWidget */,
 				D656D8AF2CC77A3F00F843BA /* Frameworks */,
 				D656D87C2CC779EB00F843BA /* Products */,
 			);
@@ -104,6 +161,7 @@
 				D656D87B2CC779EB00F843BA /* DeliveryCheck.app */,
 				D656D88D2CC779EC00F843BA /* DeliveryCheckTests.xctest */,
 				D656D8972CC779EC00F843BA /* DeliveryCheckUITests.xctest */,
+				D656D8FB2CC7965500F843BA /* DeliveryCheckWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -132,6 +190,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D656D90B2CC7965600F843BA /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				D656D87D2CC779EB00F843BA /* DeliveryCheck */,
@@ -189,6 +248,28 @@
 			productReference = D656D8972CC779EC00F843BA /* DeliveryCheckUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		D656D8FA2CC7965500F843BA /* DeliveryCheckWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D656D9102CC7965600F843BA /* Build configuration list for PBXNativeTarget "DeliveryCheckWidgetExtension" */;
+			buildPhases = (
+				D656D8F72CC7965500F843BA /* Sources */,
+				D656D8F82CC7965500F843BA /* Frameworks */,
+				D656D8F92CC7965500F843BA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				D656D8FE2CC7965500F843BA /* DeliveryCheckWidget */,
+			);
+			name = DeliveryCheckWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = DeliveryCheckWidgetExtension;
+			productReference = D656D8FB2CC7965500F843BA /* DeliveryCheckWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -210,6 +291,9 @@
 						CreatedOnToolsVersion = 16.0;
 						TestTargetID = D656D87A2CC779EB00F843BA;
 					};
+					D656D8FA2CC7965500F843BA = {
+						CreatedOnToolsVersion = 16.0;
+					};
 				};
 			};
 			buildConfigurationList = D656D8762CC779EA00F843BA /* Build configuration list for PBXProject "DeliveryCheck" */;
@@ -229,6 +313,7 @@
 				D656D87A2CC779EB00F843BA /* DeliveryCheck */,
 				D656D88C2CC779EC00F843BA /* DeliveryCheckTests */,
 				D656D8962CC779EC00F843BA /* DeliveryCheckUITests */,
+				D656D8FA2CC7965500F843BA /* DeliveryCheckWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -249,6 +334,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		D656D8952CC779EC00F843BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D656D8F92CC7965500F843BA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -279,6 +371,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D656D8F72CC7965500F843BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -291,6 +390,11 @@
 			isa = PBXTargetDependency;
 			target = D656D87A2CC779EB00F843BA /* DeliveryCheck */;
 			targetProxy = D656D8982CC779EC00F843BA /* PBXContainerItemProxy */;
+		};
+		D656D90B2CC7965600F843BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D656D8FA2CC7965500F843BA /* DeliveryCheckWidgetExtension */;
+			targetProxy = D656D90A2CC7965600F843BA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -419,6 +523,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DeliveryCheck/DeliveryCheck.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DeliveryCheck/Preview Content\"";
@@ -448,6 +553,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DeliveryCheck/DeliveryCheck.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DeliveryCheck/Preview Content\"";
@@ -544,6 +650,70 @@
 			};
 			name = Release;
 		};
+		D656D90D2CC7965600F843BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = DeliveryCheckWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8AX6CPZA8P;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DeliveryCheckWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DeliveryCheckWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sunny.DeliveryCheck.DeliveryCheckWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		D656D90E2CC7965600F843BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = DeliveryCheckWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8AX6CPZA8P;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DeliveryCheckWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DeliveryCheckWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sunny.DeliveryCheck.DeliveryCheckWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -579,6 +749,15 @@
 			buildConfigurations = (
 				D656D8A82CC779EC00F843BA /* Debug */,
 				D656D8A92CC779EC00F843BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D656D9102CC7965600F843BA /* Build configuration list for PBXNativeTarget "DeliveryCheckWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D656D90D2CC7965600F843BA /* Debug */,
+				D656D90E2CC7965600F843BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
