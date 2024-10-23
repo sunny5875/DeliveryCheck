@@ -12,7 +12,5 @@ import SwiftUI
 struct DeliveryCheckWidgetBundle: WidgetBundle {
     var body: some Widget {
         DeliveryCheckWidget()
-        DeliveryCheckWidgetControl()
-        DeliveryCheckWidgetLiveActivity()
     }
 }

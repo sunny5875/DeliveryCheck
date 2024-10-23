@@ -10,7 +10,7 @@ import SwiftData
 import WidgetKit
 
 struct ContentView: View {
-    @Query var items: [Item]
+    @Query(sort: \Item.name) var items: [Item]
     @Environment(\.modelContext) var modelContext
     @State private var isAdd = false
     private let service = FetchDataService()
@@ -27,21 +27,21 @@ struct ContentView: View {
                     .refreshable {
                         for item in items {
                             try? await service.fetchStatus(item: item)
+                            WidgetCenter.shared.reloadAllTimelines()
                         }
                     }
                 }
             }
-            .onDisappear {
-                try? modelContext.save()
-            }
-            .navigationTitle("택배췌크")
+            .navigationTitle("배송체크")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
-                ToolbarItem {
-                    Button(action: { isAdd.toggle()}) {
-                        Label("Add Item", systemImage: "plus")
+                if items.count < 7 {
+                    ToolbarItem {
+                        Button(action: { isAdd.toggle()}) {
+                            Label("Add Item", systemImage: "plus")
+                        }
                     }
                 }
             }
@@ -58,7 +58,7 @@ struct ContentView: View {
         VStack(spacing: 16) {
             Text("등록한 배송물품이 없습니다!")
                 .font(.headline)
-            Text("플러스 버튼을 눌러 추가해보세요!")
+            Text("플러스 버튼을 눌러 최대 10개까지 배송물품을 추가할 수 있습니다.")
                 .font(.caption)
         }
     }
@@ -98,6 +98,7 @@ struct ContentView: View {
             for item in items {
                 try? await service.fetchStatus(item: item)
             }
+            WidgetCenter.shared.reloadAllTimelines()
         }
     }
 
@@ -113,9 +114,9 @@ struct ContentView: View {
         withAnimation {
             for index in offsets {
                 modelContext.delete(items[index])
-                try? modelContext.save()
-                WidgetCenter.shared.reloadAllTimelines()
             }
+            try? modelContext.save()
+            WidgetCenter.shared.reloadAllTimelines()
         }
     }
     

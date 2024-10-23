@@ -9,7 +9,11 @@ import SwiftUI
 import SwiftData
 
 @Model
-final class Item {
+final class Item: Comparable {
+    static func < (lhs: Item, rhs: Item) -> Bool {
+        lhs.statusCode < rhs.statusCode
+    }
+    
     var name: String
     var carrierCompany: String
     var carrierId: String

@@ -74,7 +74,7 @@ struct DeliveryCheckWidgetEntryView : View {
             Text("\((entry.items.count))")
                 .font(.headline)
             +
-            Text("개의 배송췌크")
+            Text("개의 배송체크")
                 .font(.caption)
            
             HStack {
@@ -168,8 +168,8 @@ struct DeliveryCheckWidget: Widget {
             DeliveryCheckWidgetEntryView(entry: entry)
                 .padding()
         }
-        .configurationDisplayName("배송췌크")
-        .description("배송췌크에 있는 물품 상태를 확인합니다")
+        .configurationDisplayName("배송체크")
+        .description("배송체크에 있는 물품 상태를 확인합니다")
         .supportedFamilies([
             .systemSmall, .systemMedium, .systemLarge,
             .accessoryRectangular
