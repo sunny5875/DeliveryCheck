@@ -73,6 +73,7 @@
 			membershipExceptions = (
 				Model/Item.swift,
 				Model/Response.swift,
+				sharedModelContainer.swift,
 				ViewModel/FetchDataService.swift,
 			);
 			target = D656D8FA2CC7965500F843BA /* DeliveryCheckWidgetExtension */;

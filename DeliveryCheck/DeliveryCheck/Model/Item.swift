@@ -31,8 +31,8 @@ extension Item {
     var statusCode: Int {
         switch state {
         case "AT_PICKUP": 1
-        case "IN_TRANSIT": 2
-        case "DELIVERED", "OUT_FOR_DELIVERY": 3
+        case "IN_TRANSIT", "OUT_FOR_DELIVERY": 2
+        case "DELIVERED": 3
         default: 0
         }
     }
@@ -40,8 +40,8 @@ extension Item {
     var statusTitle: String {
         switch state {
         case "AT_PICKUP": "🛫 배송 시작"
-        case "IN_TRANSIT": "🚀 배송 중"
-        case "DELIVERED", "OUT_FOR_DELIVERY": "🎁 배송 완료"
+        case "IN_TRANSIT", "OUT_FOR_DELIVERY": "🚀 배송 중"
+        case "DELIVERED": "🎁 배송 완료"
         default: "👀 배송 준비중"
         }
     }
@@ -49,8 +49,8 @@ extension Item {
     var color: Color {
         switch state {
         case "AT_PICKUP": .blue
-        case "IN_TRANSIT": .green
-        case "DELIVERED", "OUT_FOR_DELIVERY": .orange
+        case "IN_TRANSIT", "OUT_FOR_DELIVERY": .green
+        case "DELIVERED": .orange
         default: .black
         }
     }

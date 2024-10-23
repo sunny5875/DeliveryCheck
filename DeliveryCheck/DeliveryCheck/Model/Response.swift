@@ -15,7 +15,7 @@ struct TrackData: Codable {
 }
 
 struct TrackDetails: Codable {
-    let lastEvent: EventDetails
+    let lastEvent: EventDetails?
 }
 
 struct EventDetails: Codable {

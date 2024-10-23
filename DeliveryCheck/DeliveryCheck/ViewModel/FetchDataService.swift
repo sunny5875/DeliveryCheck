@@ -57,8 +57,8 @@ final class FetchDataService {
             do {
                 let json = try JSONDecoder().decode(Response.self, from: data)
                 print(json)
-                if item.state !=  json.data.track.lastEvent.status.code {
-                    item.state = json.data.track.lastEvent.status.code
+                if let code = json.data.track.lastEvent?.status.code, item.state !=  code {
+                    item.state = code
                     WidgetCenter.shared.reloadAllTimelines()
                 }
             } catch {

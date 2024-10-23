@@ -20,19 +20,31 @@ struct Provider: TimelineProvider {
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [SimpleEntry] = []
-
         let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, items: [])
-            entries.append(entry)
+        
+        Task {
+            let service = FetchDataService()
+            let items = try await fetchData()
+            for item in items {
+                try? await service.fetchStatus(item: item)
+            }
+            let nextRefresh = Calendar.current.date(byAdding: .hour, value: 12, to: currentDate)!
+            let entry = SimpleEntry(date: nextRefresh, items: items)
+            let timeline = Timeline(entries: [entry], policy: .atEnd)
+            completion(timeline)
         }
-
-        let timeline = Timeline(entries: entries, policy: .atEnd)
-        completion(timeline)
+        
     }
+    
+    @MainActor
+    public func fetchData() async throws -> [Item] {
+        let descriptor = FetchDescriptor<Item>(predicate: nil)
 
+        let context = ModelContainer.sharedModelContainer.mainContext
+        let data = try context.fetch(descriptor)
+        return data
+    }
+    
 }
 
 struct SimpleEntry: TimelineEntry {
@@ -41,8 +53,6 @@ struct SimpleEntry: TimelineEntry {
 }
 
 struct DeliveryCheckWidgetEntryView : View {
-    @Query var items: [Item]
-    @Environment(\.modelContext) var modelContext
     @Environment(\.widgetFamily) private var widgetFamily
     
     var entry: Provider.Entry
@@ -61,7 +71,7 @@ struct DeliveryCheckWidgetEntryView : View {
     
     func defaultView() -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("\((items.count))")
+            Text("\((entry.items.count))")
                 .font(.headline)
             +
             Text("개의 배송췌크")
@@ -81,10 +91,10 @@ struct DeliveryCheckWidgetEntryView : View {
                 Spacer()
                 VStack(alignment: .leading, spacing: 4) {
                     Group {
-                        Text("\(items.filter { $0.statusCode == 0}.count)개")
-                        Text("\(items.filter { $0.statusCode == 1 }.count)개")
-                        Text("\(items.filter { $0.statusCode == 2}.count)개")
-                        Text("\(items.filter { $0.statusCode == 3 }.count)개")
+                        Text("\(entry.items.filter { $0.statusCode == 0}.count)개")
+                        Text("\(entry.items.filter { $0.statusCode == 1 }.count)개")
+                        Text("\(entry.items.filter { $0.statusCode == 2}.count)개")
+                        Text("\(entry.items.filter { $0.statusCode == 3 }.count)개")
                     }
                     .font(.caption)
                     .fontWeight(.bold)
@@ -102,7 +112,7 @@ struct DeliveryCheckWidgetEntryView : View {
                     Text("👀")
                         .font(.caption)
                 }
-                Text("\(items.filter { $0.statusCode == 0}.count)")
+                Text("\(entry.items.filter { $0.statusCode == 0}.count)")
                     .font(.subheadline)
                     .bold()
             }
@@ -114,7 +124,7 @@ struct DeliveryCheckWidgetEntryView : View {
                     Text("🛫")
                         .font(.caption)
                 }
-                Text("\(items.filter { $0.statusCode == 1}.count)")
+                Text("\(entry.items.filter { $0.statusCode == 1}.count)")
                     .font(.subheadline)
                     .bold()
             }
@@ -126,7 +136,7 @@ struct DeliveryCheckWidgetEntryView : View {
                     Text("🚀")
                         .font(.caption)
                 }
-                Text("\(items.filter { $0.statusCode == 2}.count)")
+                Text("\(entry.items.filter { $0.statusCode == 2}.count)")
                     .font(.subheadline)
                     .bold()
             }
@@ -138,7 +148,7 @@ struct DeliveryCheckWidgetEntryView : View {
                     Text("🎁")
                         .font(.caption)
                 }
-                Text("\(items.filter { $0.statusCode == 3}.count)")
+                Text("\(entry.items.filter { $0.statusCode == 3}.count)")
                     .font(.subheadline)
                     .bold()
             }
@@ -157,7 +167,6 @@ struct DeliveryCheckWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             DeliveryCheckWidgetEntryView(entry: entry)
                 .padding()
-                .modelContainer(for: [Item.self])
         }
         .configurationDisplayName("배송췌크")
         .description("배송췌크에 있는 물품 상태를 확인합니다")
