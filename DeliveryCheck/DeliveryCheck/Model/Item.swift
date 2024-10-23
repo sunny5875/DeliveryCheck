@@ -5,7 +5,7 @@
 //  Created by 현수빈 on 10/22/24.
 //
 
-import Foundation
+import SwiftUI
 import SwiftData
 
 @Model
@@ -27,12 +27,31 @@ final class Item {
 
 
 extension Item {
+    
+    var statusCode: Int {
+        switch state {
+        case "AT_PICKUP": 1
+        case "IN_TRANSIT": 2
+        case "DELIVERED", "OUT_FOR_DELIVERY": 3
+        default: 0
+        }
+    }
+    
     var statusTitle: String {
         switch state {
-        case "AT_PICKUP": "배송 시작"
-        case "IN_TRANSIT": "배송 중"
-        case "DELIVERED", "OUT_FOR_DELIVERY": "배송 완료"
-        default: "배송 준비중"
+        case "AT_PICKUP": "🛫 배송 시작"
+        case "IN_TRANSIT": "🚀 배송 중"
+        case "DELIVERED", "OUT_FOR_DELIVERY": "🎁 배송 완료"
+        default: "👀 배송 준비중"
+        }
+    }
+    
+    var color: Color {
+        switch state {
+        case "AT_PICKUP": .blue
+        case "IN_TRANSIT": .green
+        case "DELIVERED", "OUT_FOR_DELIVERY": .orange
+        default: .black
         }
     }
 }

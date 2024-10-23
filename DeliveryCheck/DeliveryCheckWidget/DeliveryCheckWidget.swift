@@ -43,10 +43,23 @@ struct SimpleEntry: TimelineEntry {
 struct DeliveryCheckWidgetEntryView : View {
     @Query var items: [Item]
     @Environment(\.modelContext) var modelContext
+    @Environment(\.widgetFamily) private var widgetFamily
     
     var entry: Provider.Entry
 
     var body: some View {
+        Group {
+            switch widgetFamily {
+            case .accessoryRectangular:
+                RectangularView()
+            default:
+                defaultView()
+            }
+        }
+        .containerBackground(for: .widget) { }
+    }
+    
+    func defaultView() -> some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("\((items.count))")
                 .font(.headline)
@@ -67,21 +80,75 @@ struct DeliveryCheckWidgetEntryView : View {
                 }
                 Spacer()
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("\(items.filter { $0.statusTitle == "배송 준비중"}.count)개")
-                        .font(.caption)
-                    Text("\(items.filter { $0.statusTitle == "배송 시작"}.count)개")
-                        .font(.caption)
-                    Text("\(items.filter { $0.statusTitle == "배송 중"}.count)개")
-                        .font(.caption)
-                    Text("\(items.filter { $0.statusTitle == "배송 완료"}.count)개")
-                        .font(.caption)
+                    Group {
+                        Text("\(items.filter { $0.statusCode == 0}.count)개")
+                        Text("\(items.filter { $0.statusCode == 1 }.count)개")
+                        Text("\(items.filter { $0.statusCode == 2}.count)개")
+                        Text("\(items.filter { $0.statusCode == 3 }.count)개")
+                    }
+                    .font(.caption)
+                    .fontWeight(.bold)
                 }
-                .foregroundStyle(Color.blue)
             }
         }
-        .containerBackground(for: .widget) { }
     }
+    
+    func RectangularView() -> some View {
+        HStack {
+            VStack {
+                ViewThatFits {
+                    Text("준비")
+                        .font(.caption)
+                    Text("👀")
+                        .font(.caption)
+                }
+                Text("\(items.filter { $0.statusCode == 0}.count)")
+                    .font(.subheadline)
+                    .bold()
+            }
+           Divider()
+            VStack {
+                ViewThatFits {
+                    Text("시작")
+                        .font(.caption)
+                    Text("🛫")
+                        .font(.caption)
+                }
+                Text("\(items.filter { $0.statusCode == 1}.count)")
+                    .font(.subheadline)
+                    .bold()
+            }
+            Divider()
+            VStack {
+                ViewThatFits {
+                    Text("진행")
+                        .font(.caption)
+                    Text("🚀")
+                        .font(.caption)
+                }
+                Text("\(items.filter { $0.statusCode == 2}.count)")
+                    .font(.subheadline)
+                    .bold()
+            }
+            Divider()
+            VStack {
+                ViewThatFits {
+                    Text("완료")
+                        .font(.caption)
+                    Text("🎁")
+                        .font(.caption)
+                }
+                Text("\(items.filter { $0.statusCode == 3}.count)")
+                    .font(.subheadline)
+                    .bold()
+            }
+        }
+    }
+    
 }
+
+
+
 
 struct DeliveryCheckWidget: Widget {
     let kind: String = "DeliveryCheckWidget"
@@ -94,7 +161,10 @@ struct DeliveryCheckWidget: Widget {
         }
         .configurationDisplayName("배송췌크")
         .description("배송췌크에 있는 물품 상태를 확인합니다")
-        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+        .supportedFamilies([
+            .systemSmall, .systemMedium, .systemLarge,
+            .accessoryRectangular
+        ])
         .contentMarginsDisabled()
         .containerBackgroundRemovable(false)
     }
