@@ -32,7 +32,7 @@ struct AddNewItemView: View {
         NavigationView {
             Form {
                 Section("물품명") {
-                    TextField("물품명을 입력하세요", text: $newItem.name)
+                    TextField("1글자 이상의 물품명을 입력하세요.", text: $newItem.name)
                     
                 }
                 
@@ -45,7 +45,7 @@ struct AddNewItemView: View {
                 }
                 
                 Section("운송장 번호") {
-                    TextField("운송장번호를 입력하세요", text: $newItem.trackingNumber)
+                    TextField("7~15글자의 운송장번호를 입력하세요", text: $newItem.trackingNumber)
                 }
                 
             }.toolbar {

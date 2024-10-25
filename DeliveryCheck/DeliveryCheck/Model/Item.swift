@@ -18,7 +18,7 @@ final class Item: Comparable {
     var carrierCompany: String
     var carrierId: String
     var state: String
-    @Attribute(.unique) var trackingNumber: String
+    var trackingNumber: String
     
     init(name: String, carrierCompany: String, carrierId: String, state: String, trackingNumber: String) {
         self.name = name
@@ -39,7 +39,7 @@ extension Item {
         case "DELIVERED": 3
         default: 0
         }
-    }
+    } 
     
     var statusTitle: String {
         switch state {
