@@ -79,14 +79,13 @@ struct DeliveryCheckWidgetEntryView : View {
            
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("👀 준비중")
-                        .font(.caption)
-                    Text("🛫 시작")
-                        .font(.caption)
-                    Text("🚀 진행중")
-                        .font(.caption)
-                    Text("🎁 완료")
-                        .font(.caption)
+                    Group {
+                        Text("👀 준비중")
+                        Text("🛫 시작")
+                        Text("🚀 진행중")
+                        Text("🎁 완료")
+                    }
+                    .font(.caption)
                 }
                 Spacer()
                 VStack(alignment: .leading, spacing: 4) {

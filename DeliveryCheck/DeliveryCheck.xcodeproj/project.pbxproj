@@ -73,8 +73,8 @@
 			membershipExceptions = (
 				Model/Item.swift,
 				Model/Response.swift,
+				Service/FetchDataService.swift,
 				sharedModelContainer.swift,
-				ViewModel/FetchDataService.swift,
 			);
 			target = D656D8FA2CC7965500F843BA /* DeliveryCheckWidgetExtension */;
 		};
@@ -536,7 +536,7 @@
 				CODE_SIGN_ENTITLEMENTS = DeliveryCheck/DeliveryCheck.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"DeliveryCheck/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 2YJXRFH75A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -575,7 +575,7 @@
 				CODE_SIGN_ENTITLEMENTS = DeliveryCheck/DeliveryCheck.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"DeliveryCheck/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 2YJXRFH75A;
 				ENABLE_PREVIEWS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;

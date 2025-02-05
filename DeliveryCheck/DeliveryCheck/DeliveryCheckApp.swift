@@ -24,7 +24,7 @@ struct DeliveryCheckApp: App {
                         }
                     }
             } else {
-                ContentView()
+                MainView()
             }
         }
         .modelContainer(ModelContainer.sharedModelContainer)

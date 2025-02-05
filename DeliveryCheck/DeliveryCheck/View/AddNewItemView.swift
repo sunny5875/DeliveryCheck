@@ -33,7 +33,6 @@ struct AddNewItemView: View {
             Form {
                 Section("물품명") {
                     TextField("1글자 이상의 물품명을 입력하세요.", text: $newItem.name)
-                    
                 }
                 
                 Section("배송사") {
@@ -45,10 +44,21 @@ struct AddNewItemView: View {
                 }
                 
                 Section("운송장 번호") {
-                    TextField("7~15글자의 운송장번호를 입력하세요", text: $newItem.trackingNumber)
+                    HStack {
+                        TextField(
+                            "7~15글자의 운송장번호를 입력하세요",
+                            text: $newItem.trackingNumber
+                        )
+                        Button("붙여넣기") {
+                            newItem.trackingNumber = UIPasteboard.general.string ?? ""
+                        }
+                        
+                    }
                 }
                 
-            }.toolbar {
+            }
+            .navigationTitle("등록하기")
+            .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
                         guard isValid else { return }
