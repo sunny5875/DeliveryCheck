@@ -12,13 +12,12 @@ import Charts
 
 struct MainView: View {
     @State private var path = [Item]()
-    @Query(sort: \Item.name) var items: [Item]
-    @Environment(\.modelContext) var modelContext
+    @Query private var items: [Item]
+    @Environment(\.modelContext) private var modelContext
     @State private var isAdd = false
     private let service = FetchDataService()
 
     
-
     var body: some View {
         NavigationStack(path: $path) {
             Group {
@@ -28,6 +27,16 @@ struct MainView: View {
                     List {
                         chart
                         content
+                    }
+                    .task {
+                        await withTaskGroup(of: Void.self) { group in
+                            for item in items {
+                                group.addTask {
+                                    try? await service.fetchStatus(item: item)
+                                }
+                            }
+                        }
+                        WidgetCenter.shared.reloadAllTimelines()
                     }
                     .refreshable {
                         for item in items {
@@ -47,11 +56,6 @@ struct MainView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { deleteCompletedItem()}) {
-                        Text("정리")
-                    }
-                }
             }
             .overlay(alignment: .bottomTrailing) {
                 if items.count < 10 {
@@ -68,7 +72,6 @@ struct MainView: View {
     }
     
     private var plusButton: some View {
-        
         Button(action: { isAdd.toggle()}) {
             Image(systemName: "plus")
                 .resizable()
@@ -78,6 +81,7 @@ struct MainView: View {
                 .foregroundStyle(Color.white)
                 .background(Color.blue)
                 .clipShape(Circle())
+                .contentShape(Circle())
                 .offset(x: -32, y: -16)
                 .shadow(radius: 4)
         }
@@ -85,26 +89,22 @@ struct MainView: View {
     
     private var emptyContet: some View {
         VStack(spacing: 16) {
+            Spacer()
             Text("등록한 배송물품이 없습니다!")
                 .font(.headline)
             Text("플러스 버튼을 눌러 최대 10개까지 배송물품을 추가할 수 있습니다.")
                 .font(.caption)
+            Spacer()
         }
+        .frame(maxWidth: .infinity)
     }
     
+    @ViewBuilder
     private var content: some View {
-        Section("배송물품 목록") {
-            ForEach(items) { item in
-                NavigationLink(value: item, label: { cell(item) })
-            }
-            .onDelete(perform: deleteItems)
-            .task {
-                for item in items {
-                    try? await service.fetchStatus(item: item)
-                }
-                WidgetCenter.shared.reloadAllTimelines()
-            }
+        ForEach(items.sorted(), id: \.id) { item in
+            NavigationLink(value: item, label: { cell(item) })
         }
+        .onDelete(perform: deleteItems)
     }
     
     private func cell(_ item: Item) -> some View {
@@ -169,6 +169,7 @@ struct MainView: View {
 }
 
 
+
 extension MainView {
     private func addItem(new: Item) {
         withAnimation {
@@ -180,8 +181,8 @@ extension MainView {
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+            for offset in offsets {
+                modelContext.delete(items.sorted()[offset])
             }
             try? modelContext.save()
             WidgetCenter.shared.reloadAllTimelines()

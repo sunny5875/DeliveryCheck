@@ -11,7 +11,11 @@ import SwiftData
 @Model
 final class Item: Comparable {
     static func < (lhs: Item, rhs: Item) -> Bool {
-        lhs.statusCode < rhs.statusCode
+        if lhs.statusCode == rhs.statusCode {
+            return lhs.name < rhs.name
+        } else {
+            return lhs.statusCode < rhs.statusCode
+        }
     }
     
     var name: String
