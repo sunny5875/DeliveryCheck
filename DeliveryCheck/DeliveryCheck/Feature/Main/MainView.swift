@@ -10,69 +10,58 @@ import SwiftData
 import WidgetKit
 import Charts
 
-struct MainView: View {
-    @State private var path = [Item]()
-    @Query private var items: [Item]
-    @Environment(\.modelContext) private var modelContext
-    @State private var isAdd = false
-    private let service = FetchDataService()
+import ComposableArchitecture
 
+struct MainView: View {
+    @Bindable var store: StoreOf<MainStore>
     
     var body: some View {
-        NavigationStack(path: $path) {
-            Group {
-                if items.isEmpty {
-                    emptyContet
-                } else {
-                    List {
-                        chart
-                        content
-                    }
-                    .task {
-                        await withTaskGroup(of: Void.self) { group in
-                            for item in items {
-                                group.addTask {
-                                    try? await service.fetchStatus(item: item)
-                                }
-                            }
-                        }
-                        WidgetCenter.shared.reloadAllTimelines()
-                    }
-                    .refreshable {
-                        for item in items {
-                            try? await service.fetchStatus(item: item)
-                            WidgetCenter.shared.reloadAllTimelines()
+        NavigationStackStore(
+            store.scope(state: \.path, action: \.path)
+        ) {
+            NavigationView {
+                Group {
+                    if store.items.isEmpty {
+                        emptyContet
+                    } else {
+                        List {
+                            chart
+                            content
+                            description
                         }
                     }
                 }
-            }
-            .navigationTitle("배송체크")
-            .navigationBarBackButtonHidden(true)
-            .navigationDestination(for: Item.self) {
-                DetailItemView(path: $path, item: $0)
-                    .environment(\.modelContext, modelContext)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+                .navigationTitle("배송체크")
+                .navigationBarBackButtonHidden(true)
+                .overlay(alignment: .bottomTrailing) {
+                    if store.items.count < Int.maxCount {
+                        plusButton
+                    }
                 }
             }
-            .overlay(alignment: .bottomTrailing) {
-                if items.count < 10 {
-                    plusButton
-                }
+            .sheet(item: $store.scope(state: \.addItem, action: \.addItem)) { store in
+                AddNewItemView(store: store)
             }
-        }
-        .sheet(isPresented: $isAdd) {
-            AddNewItemView(onAdd: { new in
-                addItem(new: new)
-                isAdd.toggle()
-            })
+            .onAppear {
+                store.send(.onAppear, animation: .default)
+            }
+            .refreshable {
+                store.send(.refresh, animation: .default)
+            }
+            
+        } destination: { store in
+            switch store.case {
+            case .detailItem(let store):
+                DetailItemView(store: store)
+            }
+            
         }
     }
     
     private var plusButton: some View {
-        Button(action: { isAdd.toggle()}) {
+        Button(action: {
+            store.send(.didTapAddButton, animation: .default)
+        }) {
             Image(systemName: "plus")
                 .resizable()
                 .scaledToFit()
@@ -92,7 +81,7 @@ struct MainView: View {
             Spacer()
             Text("등록한 배송물품이 없습니다!")
                 .font(.headline)
-            Text("플러스 버튼을 눌러 최대 10개까지 배송물품을 추가할 수 있습니다.")
+            Text("플러스 버튼을 눌러 최대 \(Int.maxCount)개까지 배송물품을 추가할 수 있습니다.")
                 .font(.caption)
             Spacer()
         }
@@ -101,10 +90,28 @@ struct MainView: View {
     
     @ViewBuilder
     private var content: some View {
-        ForEach(items.sorted(), id: \.id) { item in
-            NavigationLink(value: item, label: { cell(item) })
+        let dict = store.items.reduce(into: [String: [Item]]()) { result, item in
+            result[item.state, default: []].append(item)
+        }.sorted(by: { $0.key.statusCode < $1.key.statusCode })
+        
+        ForEach(dict, id: \.key) { (key, value) in
+            Section("\(key.statusTitle)") {
+                ForEach(value, id: \.id) { item in
+                    
+                    NavigationLink(
+                        state: MainStore.Path.State.detailItem(DetailItemStore.State(item: item))
+                    ) {
+                        cell(item)
+                            .swipeActions(edge: .trailing) {
+                                Button("삭제", role: .destructive) {
+                                    store.send(.didTapDeleteButton(item), animation: .default)
+                                }
+                            }
+                    }
+                    
+                }
+            }
         }
-        .onDelete(perform: deleteItems)
     }
     
     private func cell(_ item: Item) -> some View {
@@ -124,7 +131,6 @@ struct MainView: View {
                 .font(.caption2)
                 .fontWeight(.bold)
                 .padding(8)
-                .background(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .overlay {
                     RoundedRectangle(cornerRadius: 8)
@@ -136,66 +142,54 @@ struct MainView: View {
     
     @ViewBuilder
     private var chart: some View {
-        Section("\((items.count))개의 배송체크") {
-            HStack {
-                let dict = items.reduce(into: [String: Int]()) { result, item in
+        Section("\((store.items.count))개의 배송체크") {
+            VStack(spacing: 16) {
+                let dict = store.items.reduce(into: [String: Int]()) { result, item in
                     result[item.state, default: 0] += 1
-                }
+                }.sorted(by: { $0.key.statusCode < $1.key.statusCode })
                 
-                Chart(dict.sorted(by: { $0.key < $1.key }), id: \.key) { (key, value) in
+                Chart(dict, id: \.key) { (key, value) in
                     SectorMark(
                         angle: .value(
                             Text(verbatim: key),
                             value
                         ),
-                        innerRadius: .ratio(0.6),
-                        angularInset: 2
+                        angularInset: 1
                     )
                     .cornerRadius(5)
-                    .foregroundStyle(
-                        by: .value(
-                            Text(verbatim: "\(key.statusTitle)(\(value))"),
-                            "\(key.statusTitle)(\(value))"
-                        )
-                    )
+                    .foregroundStyle(key.color)
+                    .annotation(position: .overlay) {
+                        Text("\(key.statusTitle)")
+                            .foregroundStyle(Color.white)
+                            .font(.caption2)
+                    }
                 }
-                .chartLegend(alignment: .top, spacing: 18)
-                .frame(height: 200)
+                .chartLegend(position: .bottom, spacing: 32) {
+                    Text("안녕")
+                }
+                .frame(height: 180)
                 
+                
+                Text(dict.map { "\($0.statusTitle)(\($1))"}.joined(separator: " "))
+                    .font(.caption)
             }
         }
     }
     
+    @ViewBuilder
+    private var description: some View {
+        if store.items.count == Int.maxCount {
+            Text("최대 \(Int.maxCount)개까지 배송물품을 추가할 수 있습니다.")
+                .font(.caption)
+                .foregroundStyle(Color.gray)
+        } else {
+            EmptyView()
+        }
+    }
 }
 
 
 
 extension MainView {
-    private func addItem(new: Item) {
-        withAnimation {
-            modelContext.insert(new)
-            try? modelContext.save()
-            WidgetCenter.shared.reloadAllTimelines()
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for offset in offsets {
-                modelContext.delete(items.sorted()[offset])
-            }
-            try? modelContext.save()
-            WidgetCenter.shared.reloadAllTimelines()
-        }
-    }
     
-    private func deleteCompletedItem() {
-        withAnimation {
-            for item in items where item.statusCode == 3 {
-                modelContext.delete(item)
-            }
-            try? modelContext.save()
-            WidgetCenter.shared.reloadAllTimelines()
-        }
-    }
 }

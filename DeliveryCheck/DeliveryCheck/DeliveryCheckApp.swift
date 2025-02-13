@@ -12,7 +12,6 @@ import SwiftData
 struct DeliveryCheckApp: App {
     @State var isSplashView = true
     
-
     var body: some Scene {
         WindowGroup {
             if isSplashView {
@@ -24,7 +23,12 @@ struct DeliveryCheckApp: App {
                         }
                     }
             } else {
-                MainView()
+                MainView(store: .init(
+                    initialState: .init(),
+                    reducer: {
+                        MainStore()._printChanges()
+                    }
+                ))
             }
         }
         .modelContainer(ModelContainer.sharedModelContainer)

@@ -9,6 +9,8 @@ import SwiftUI
 import WebKit
 import WidgetKit
 
+import ComposableArchitecture
+
 struct WebView: UIViewRepresentable {
     let url: URL
 
@@ -24,64 +26,51 @@ struct WebView: UIViewRepresentable {
 
 
 struct DetailItemView: View {
-    @Binding var path: [Item]
-    @Environment(\.modelContext) var modelContext
-    @State private var isEdit = false
-    @State private var isDelete = false
-    let item: Item
     
-    var url: URL? {
-        URL(string: "https://link.tracker.delivery/track?client_id=45458ld9m1fv5m12m660qs0jad&carrier_id=\(item.carrierId)&tracking_number=\(item.trackingNumber)")
-    }
+//    @Binding var path: [Item]
+//    @Environment(\.modelContext) var modelContext
+//    @State private var isEdit = false
+//    @State private var isDelete = false
+//    let item: Item
+    
+    @Bindable var store: StoreOf<DetailItemStore>
     
     var body: some View {
         VStack {
-            if let url {
+            if let url = store.url {
                 WebView(url: url)
-                .navigationTitle(item.name)
+                    .navigationTitle(store.item.name)
                 .toolbarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden()
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
-                        Button(action: { path.removeLast() }) {
+                        Button(action: {
+                            store.send(.didTapBackButton)
+                        }) {
                             Label("뒤로가기", systemImage: "chevron.backward")
                         }
                     }
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button(action: { isEdit.toggle() }) {
+                        Button(action: { store.send(.didTapEditButton) }) {
                             Label("수정", systemImage: "pencil")
                         }
                     }
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button(action: { deleteItem() }) {
+                        Button(action: { store.send(.didTapDeleteButton) }) {
                             Label("삭제", systemImage: "trash")
                         }
                     }
                 }
             }
         }
-        .sheet(isPresented: $isEdit) {
+        .sheet(isPresented: $store.isEdit) {
             EditItemVIew(
-                item: item,
+                item: store.item,
                 onEdit: { new in
-                    editItem(new: new)
-                    isEdit.toggle()
+                    store.send(.didTapEditConfirmButton(new))
                 }
             )
         }
     }
     
-    private func editItem(new: Item) {
-        withAnimation {
-            try? modelContext.save()
-            WidgetCenter.shared.reloadAllTimelines()
-        }
-    }
-    
-    private func deleteItem() {
-        modelContext.delete(item)
-        try? modelContext.save()
-        WidgetCenter.shared.reloadAllTimelines()
-        path.removeLast()
-    }
 }

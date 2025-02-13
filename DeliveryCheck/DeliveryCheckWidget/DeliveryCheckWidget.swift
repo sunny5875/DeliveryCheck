@@ -9,7 +9,15 @@ import WidgetKit
 import SwiftUI
 import SwiftData
 
+import ComposableArchitecture
+
 struct Provider: TimelineProvider {
+    
+    
+    @Dependency(\.network) var network
+    @Dependency(\.swiftData) var database
+    
+    
     func placeholder(in context: Context) -> SimpleEntry {
         SimpleEntry(date: Date(), items: [])
     }
@@ -23,10 +31,11 @@ struct Provider: TimelineProvider {
         let currentDate = Date()
         
         Task {
-            let service = FetchDataService()
-            let items = try await fetchData()
-            for item in items {
-                try? await service.fetchStatus(item: item)
+            var items = try database.fetchAll()
+            for i in 0..<items.count {
+                if let new = try? await network.fetch(items[i]) {
+                    items[i] = new
+                }
             }
             let nextRefresh = Calendar.current.date(byAdding: .hour, value: 12, to: currentDate)!
             let entry = SimpleEntry(date: nextRefresh, items: items)
@@ -36,14 +45,14 @@ struct Provider: TimelineProvider {
         
     }
     
-    @MainActor
-    public func fetchData() async throws -> [Item] {
-        let descriptor = FetchDescriptor<Item>(predicate: nil)
-
-        let context = ModelContainer.sharedModelContainer.mainContext
-        let data = try context.fetch(descriptor)
-        return data
-    }
+//    @MainActor
+//    public func fetchData() async throws -> [Item] {
+//        let descriptor = FetchDescriptor<Item>(predicate: nil)
+//
+//        let context = ModelContainer.sharedModelContainer.mainContext
+//        let data = try context.fetch(descriptor)
+//        return data
+//    }
     
 }
 

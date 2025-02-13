@@ -1,5 +1,5 @@
 //
-//  FetchDataService.swift
+//  NetworkService.swift
 //  DeliveryCheck
 //
 //  Created by 현수빈 on 10/22/24.
@@ -9,20 +9,39 @@ import SwiftUI
 import SwiftData
 import WidgetKit
 
-final class FetchDataService {
-    init() {}
+import ComposableArchitecture
+
+
+extension DependencyValues {
+    var network: NetworkService {
+        get { self[NetworkService.self] }
+        set { self[NetworkService.self] = newValue }
+    }
+}
+
+struct NetworkService {
+    var fetch: @Sendable (Item) async throws -> (Item)
     
-    func fetchStatus(item: Item) async throws {
+    enum MovieError: Error {
+        case add
+        case delete
+    }
+}
+
+extension NetworkService: DependencyKey {
+    public static let liveValue = Self(fetch: { item in
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "apis.tracker.delivery"
         urlComponents.path = "/graphql"
-        guard let url = urlComponents.url else { return }
+        guard let url = urlComponents.url,
+              let apiKey = Bundle.main.infoDictionary?["apiKey"] as? String
+        else { return item }
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("TRACKQL-API-KEY 45458ld9m1fv5m12m660qs0jad:b808nhsv4va953s95k4r56hq86b45j6hcitch9f9n3rqg6ug2tn", forHTTPHeaderField: "Authorization")
+        request.setValue(apiKey, forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
 
 
@@ -54,18 +73,23 @@ final class FetchDataService {
         let (data, response) = try await session.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+            debugPrint(String(data: data, encoding: .utf8) ?? "")
             do {
                 let json = try JSONDecoder().decode(Response.self, from: data)
-                print(json)
+                debugPrint(json)
                 if let code = json.data.track.lastEvent?.status.code, item.state !=  code {
                     item.state = code
                 }
+                return item
             } catch {
-                print("Error parsing JSON response: \(error.localizedDescription)")
+                debugPrint("Error parsing JSON response: \(error.localizedDescription)")
                 throw error
             }
         } else {
-            print("Server responded with error. Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1)")
+            debugPrint("Server responded with error. Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1)")
         }
-    }
+        return item
+    })
+    
+    
 }

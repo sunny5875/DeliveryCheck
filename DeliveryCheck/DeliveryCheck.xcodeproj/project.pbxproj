@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D62AA7D12D5DC796000CED90 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D62AA7D02D5DC796000CED90 /* ComposableArchitecture */; };
+		D62AA7DE2D5DCED8000CED90 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D62AA7DD2D5DCED8000CED90 /* ComposableArchitecture */; };
 		D656D8FC2CC7965500F843BA /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D656D8B02CC77A3F00F843BA /* WidgetKit.framework */; };
 		D656D8FD2CC7965500F843BA /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D656D8B22CC77A4000F843BA /* SwiftUI.framework */; };
 		D656D90C2CC7965600F843BA /* DeliveryCheckWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D656D8FB2CC7965500F843BA /* DeliveryCheckWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -71,10 +73,14 @@
 		D656D9142CC797EE00F843BA /* Exceptions for "DeliveryCheck" folder in "DeliveryCheckWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				config.xcconfig,
 				Model/Item.swift,
 				Model/Response.swift,
-				Service/FetchDataService.swift,
-				sharedModelContainer.swift,
+				Service/Database/Database.swift,
+				Service/Database/DatabaseService.swift,
+				Service/Database/sharedModelContainer.swift,
+				Service/Network/NetworkService.swift,
+				"Utils/String+.swift",
 			);
 			target = D656D8FA2CC7965500F843BA /* DeliveryCheckWidgetExtension */;
 		};
@@ -122,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D62AA7D12D5DC796000CED90 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +152,7 @@
 			files = (
 				D656D8FD2CC7965500F843BA /* SwiftUI.framework in Frameworks */,
 				D656D8FC2CC7965500F843BA /* WidgetKit.framework in Frameworks */,
+				D62AA7DE2D5DCED8000CED90 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,6 +214,7 @@
 			);
 			name = DeliveryCheck;
 			packageProductDependencies = (
+				D62AA7D02D5DC796000CED90 /* ComposableArchitecture */,
 			);
 			productName = DeliveryCheck;
 			productReference = D656D87B2CC779EB00F843BA /* DeliveryCheck.app */;
@@ -274,6 +283,7 @@
 			);
 			name = DeliveryCheckWidgetExtension;
 			packageProductDependencies = (
+				D62AA7DD2D5DCED8000CED90 /* ComposableArchitecture */,
 			);
 			productName = DeliveryCheckWidgetExtension;
 			productReference = D656D8FB2CC7965500F843BA /* DeliveryCheckWidgetExtension.appex */;
@@ -314,6 +324,9 @@
 			);
 			mainGroup = D656D8722CC779EA00F843BA;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D62AA7CF2D5DC796000CED90 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D656D87C2CC779EB00F843BA /* Products */;
 			projectDirPath = "";
@@ -410,6 +423,8 @@
 /* Begin XCBuildConfiguration section */
 		D656D89F2CC779EC00F843BA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D656D87D2CC779EB00F843BA /* DeliveryCheck */;
+			baseConfigurationReferenceRelativePath = config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -473,6 +488,8 @@
 		};
 		D656D8A02CC779EC00F843BA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D656D87D2CC779EB00F843BA /* DeliveryCheck */;
+			baseConfigurationReferenceRelativePath = config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -529,6 +546,8 @@
 		};
 		D656D8A22CC779EC00F843BA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D656D87D2CC779EB00F843BA /* DeliveryCheck */;
+			baseConfigurationReferenceRelativePath = config.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -568,6 +587,8 @@
 		};
 		D656D8A32CC779EC00F843BA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D656D87D2CC779EB00F843BA /* DeliveryCheck */;
+			baseConfigurationReferenceRelativePath = config.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -609,6 +630,8 @@
 		};
 		D656D8A52CC779EC00F843BA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D656D87D2CC779EB00F843BA /* DeliveryCheck */;
+			baseConfigurationReferenceRelativePath = config.xcconfig;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -628,6 +651,8 @@
 		};
 		D656D8A62CC779EC00F843BA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D656D87D2CC779EB00F843BA /* DeliveryCheck */;
+			baseConfigurationReferenceRelativePath = config.xcconfig;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -647,6 +672,8 @@
 		};
 		D656D8A82CC779EC00F843BA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D656D87D2CC779EB00F843BA /* DeliveryCheck */;
+			baseConfigurationReferenceRelativePath = config.xcconfig;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -664,6 +691,8 @@
 		};
 		D656D8A92CC779EC00F843BA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D656D87D2CC779EB00F843BA /* DeliveryCheck */;
+			baseConfigurationReferenceRelativePath = config.xcconfig;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -681,6 +710,8 @@
 		};
 		D656D90D2CC7965600F843BA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D656D87D2CC779EB00F843BA /* DeliveryCheck */;
+			baseConfigurationReferenceRelativePath = config.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
@@ -714,6 +745,8 @@
 		};
 		D656D90E2CC7965600F843BA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = D656D87D2CC779EB00F843BA /* DeliveryCheck */;
+			baseConfigurationReferenceRelativePath = config.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
@@ -796,6 +829,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D62AA7CF2D5DC796000CED90 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.11.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D62AA7D02D5DC796000CED90 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D62AA7CF2D5DC796000CED90 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+		D62AA7DD2D5DCED8000CED90 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D62AA7CF2D5DC796000CED90 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D656D8732CC779EA00F843BA /* Project object */;
 }
