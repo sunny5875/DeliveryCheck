@@ -18,6 +18,8 @@ struct MainStore {
     struct State {
         var isLoading = false
         var items: [Item] = []
+        var selectedCount: Int? = nil
+        var selectedKey: (key: String, value: Int)? = nil
         
         var path = StackState<Path.State>()
         @Presents var addItem: AddItemStore.State?
@@ -31,6 +33,8 @@ struct MainStore {
         
         case onAppear
         case onAppearCompleted([Item])
+        
+        case onChange([(key: String, value: Int)])
         
         case refresh
         case refreshFinish([Item])
@@ -131,7 +135,19 @@ struct MainStore {
                     state.addItem = .none
                 }
                 return .none
-            
+                
+            case let .onChange(dict):
+                guard let value = state.selectedCount
+                else { return .none }
+                var accumulatedCount = 0
+
+                let item = dict.first { (_, count) in
+                    accumulatedCount += count
+                    return value <= accumulatedCount
+                }
+                state.selectedKey = item
+                return .none
+                
             default:
                 return .none
             }
@@ -151,5 +167,6 @@ struct MainStore {
         try context.delete(item)
         WidgetCenter.shared.reloadAllTimelines()
     }
+    
     
 }

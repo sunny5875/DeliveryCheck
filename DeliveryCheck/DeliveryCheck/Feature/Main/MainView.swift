@@ -13,6 +13,7 @@ import Charts
 import ComposableArchitecture
 
 struct MainView: View {
+    @Namespace var namespace
     @Bindable var store: StoreOf<MainStore>
     
     var body: some View {
@@ -20,24 +21,28 @@ struct MainView: View {
             store.scope(state: \.path, action: \.path)
         ) {
             NavigationView {
+              ZStack(alignment: .bottomTrailing) {
                 Group {
-                    if store.items.isEmpty {
-                        emptyContet
-                    } else {
-                        List {
-                            chart
-                            content
-                            description
-                        }
+                  if store.items.isEmpty {
+                    emptyContet
+                  } else {
+                    List {
+                      chart
+                      content
+                      description
                     }
+                  }
                 }
                 .navigationTitle("배송체크")
                 .navigationBarBackButtonHidden(true)
-                .overlay(alignment: .bottomTrailing) {
-                    if store.items.count < Int.maxCount {
-                        plusButton
-                    }
+                
+                if store.items.count < Int.maxCount {
+                  plusButton
+                        .padding(12)
+                        .contentShape(Rectangle())
+                        .allowsHitTesting(true)
                 }
+              }
             }
             .sheet(item: $store.scope(state: \.addItem, action: \.addItem)) { store in
                 AddNewItemView(store: store)
@@ -154,18 +159,34 @@ struct MainView: View {
                             Text(verbatim: key),
                             value
                         ),
-                        angularInset: 1
+                        innerRadius: .ratio(0.5),
+                        angularInset: 2
                     )
-                    .cornerRadius(5)
-                    .foregroundStyle(key.color)
+                    .cornerRadius(8)
+                    .foregroundStyle( key.color
+                        .opacity(store.selectedKey == nil || store.selectedKey?.key == key ? 1 : 0.3)
+                    )
                     .annotation(position: .overlay) {
-                        Text("\(key.statusTitle)")
-                            .foregroundStyle(Color.white)
-                            .font(.caption2)
+                        Text("\(value)개")
+                            .font(.caption)
+                            .foregroundStyle(.white)
                     }
                 }
-                .chartLegend(position: .bottom, spacing: 32) {
-                    Text("안녕")
+                .chartAngleSelection(value: $store.selectedCount)
+                .onChange(of: store.selectedCount) { _, _ in
+                    store.send(.onChange(dict))
+                }
+                .chartBackground { proxy in
+                    VStack(spacing: 2) {
+                        Text(store.selectedKey?.key.statusTitle ?? "총 물품 수")
+                            .font(.caption)
+                            .foregroundStyle(.gray)
+        
+                        Text("\(store.selectedKey?.value ?? store.items.count)개")
+                            .font(.caption)
+                            .bold()
+                    }
+                    .matchedGeometryEffect(id: "chart", in: namespace)
                 }
                 .frame(height: 180)
                 
@@ -186,10 +207,5 @@ struct MainView: View {
             EmptyView()
         }
     }
-}
-
-
-
-extension MainView {
     
 }

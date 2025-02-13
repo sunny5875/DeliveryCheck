@@ -45,15 +45,6 @@ struct Provider: TimelineProvider {
         
     }
     
-//    @MainActor
-//    public func fetchData() async throws -> [Item] {
-//        let descriptor = FetchDescriptor<Item>(predicate: nil)
-//
-//        let context = ModelContainer.sharedModelContainer.mainContext
-//        let data = try context.fetch(descriptor)
-//        return data
-//    }
-    
 }
 
 struct SimpleEntry: TimelineEntry {

@@ -26,13 +26,6 @@ struct WebView: UIViewRepresentable {
 
 
 struct DetailItemView: View {
-    
-//    @Binding var path: [Item]
-//    @Environment(\.modelContext) var modelContext
-//    @State private var isEdit = false
-//    @State private var isDelete = false
-//    let item: Item
-    
     @Bindable var store: StoreOf<DetailItemStore>
     
     var body: some View {
