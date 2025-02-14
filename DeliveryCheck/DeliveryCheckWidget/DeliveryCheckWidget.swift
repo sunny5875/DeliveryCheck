@@ -62,6 +62,8 @@ struct DeliveryCheckWidgetEntryView : View {
             switch widgetFamily {
             case .accessoryRectangular:
                 RectangularView()
+            case .accessoryCircular:
+                CircleView()
             default:
                 defaultView()
             }
@@ -154,6 +156,21 @@ struct DeliveryCheckWidgetEntryView : View {
         }
     }
     
+    
+    @ViewBuilder
+    func CircleView() -> some View {
+        let completed = Double(entry.items.filter { $0.statusCode == 3}.count)
+        let range = 0.0...Double(entry.items.count)
+        
+        Gauge(value: completed, in: range) {
+            Text(Int(completed), format: .number)
+        } currentValueLabel: {
+              Text("🎁")
+        }
+        .gaugeStyle(.accessoryCircular)
+        .frame(width: 60, height: 60)
+    }
+    
 }
 
 
@@ -171,7 +188,8 @@ struct DeliveryCheckWidget: Widget {
         .description("배송체크에 있는 물품 상태를 확인합니다")
         .supportedFamilies([
             .systemSmall, .systemMedium, .systemLarge,
-            .accessoryRectangular
+            .accessoryRectangular,
+            .accessoryCircular
         ])
         .contentMarginsDisabled()
         .containerBackgroundRemovable(false)
