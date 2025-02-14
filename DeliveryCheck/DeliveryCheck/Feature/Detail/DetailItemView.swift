@@ -17,19 +17,15 @@ struct DetailItemView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                Section(store.item.name) {
+            ScrollView {
+                VStack(spacing: 32) {
                     header
-                }
-                Section("배송 현황") {
+                    
                     if store.eventList.isEmpty {
                         Text("아직 배송이 진행되지 않았어요!")
                             .font(.caption)
-                        
                     } else {
                         VStack(spacing: 0) {
-                            Spacer(minLength: 32)
-                            
                             ForEach(store.eventList, id: \.self) { item in
                                 cell(item, isLast: store.eventList.last == item)
                             }
@@ -49,19 +45,19 @@ struct DetailItemView: View {
                 Button(action: { store.send(.didTapBackButton) }) {
                     Label("뒤로가기", systemImage: "chevron.backward")
                 }
-                .tint(Color.black)
+                .tint(Color("customBlack"))
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: { store.send(.didTapEditButton) }) {
                     Label("수정", systemImage: "square.and.pencil")
                 }
-                .tint(Color.black)
+                .tint(Color("customBlack"))
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: { store.send(.didTapDeleteButton) }) {
                     Label("삭제", systemImage: "trash")
                 }
-                .tint(Color.black)
+                .tint(Color("customBlack"))
             }
         }
         .onAppear {
@@ -124,6 +120,14 @@ struct DetailItemView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 32)
         .padding(.horizontal, 16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.blue.opacity(0.03))
+                .shadow(radius: 2)
+        )
+        .padding(.horizontal, 20)
+        
+        
     }
     
     func cell(_ item: EventDetails, isLast: Bool) -> some View {

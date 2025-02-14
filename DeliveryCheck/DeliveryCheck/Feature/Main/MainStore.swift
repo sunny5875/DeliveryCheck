@@ -108,7 +108,6 @@ struct MainStore {
                     WidgetCenter.shared.reloadAllTimelines()
                 }
                 
-                
             case let .didTapDeleteButton(item):
                 return .run { send in
                     try? deleteItem(item)
