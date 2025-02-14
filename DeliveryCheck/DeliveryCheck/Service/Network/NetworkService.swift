@@ -21,11 +21,7 @@ extension DependencyValues {
 
 struct NetworkService {
     var fetch: @Sendable (Item) async throws -> (Item)
-    
-    enum MovieError: Error {
-        case add
-        case delete
-    }
+
 }
 
 extension NetworkService: DependencyKey {
@@ -83,13 +79,11 @@ extension NetworkService: DependencyKey {
                 return item
             } catch {
                 debugPrint("Error parsing JSON response: \(error.localizedDescription)")
-                throw error
+                throw CommonError.invalidResponse
             }
         } else {
             debugPrint("Server responded with error. Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1)")
+            throw CommonError.networkError
         }
-        return item
     })
-    
-    
 }
