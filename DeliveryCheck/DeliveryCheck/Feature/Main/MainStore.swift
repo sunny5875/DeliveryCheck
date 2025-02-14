@@ -88,6 +88,7 @@ struct MainStore {
                 return .run { [state = state] send in
                     var newItems: [Item] = state.items
                     for i in 0..<newItems.count {
+                        guard newItems[i].statusCode != 3 else { continue }
                         do {
                             newItems[i] = try await network.fetch(newItems[i])
                         } catch CommonError.invalidResponse {
