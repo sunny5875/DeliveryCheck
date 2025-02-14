@@ -20,7 +20,8 @@ struct DetailItemStore {
     struct State: Equatable {
         var isLoading = false
         var item: Item
-        var isEdit = false
+        
+        @Presents var editItem: EditItemStore.State?
         
         var url: URL? {
             URL(string: "https://link.tracker.delivery/track?client_id=45458ld9m1fv5m12m660qs0jad&carrier_id=\(item.carrierId)&tracking_number=\(item.trackingNumber)")
@@ -37,11 +38,12 @@ struct DetailItemStore {
         case didTapBackButton
         
         case didTapEditButton
-        case didTapEditConfirmButton(Item)
-        case editCompleted(Item)
         
         case didTapDeleteButton
         case deleteCompleted
+        
+        
+        case editItem(PresentationAction<EditItemStore.Action>)
         
     }
     
@@ -60,19 +62,14 @@ struct DetailItemStore {
                 return .none 
                 
             case .didTapEditButton:
-                state.isEdit.toggle()
+                state.editItem = EditItemStore.State(item: state.item)
                 return .none
                 
-            case let .didTapEditConfirmButton(item):
-                return .run { send in
-                    try? editItem(new: item)
-                    await send(.editCompleted(item))
-                }
-                
-            case let .editCompleted(item):
-                state.isEdit.toggle()
+            case let .editItem(.presented(.editCompleted(item))):
                 state.item = item
+                state.editItem = .none
                 return .none
+                
                 
             case .didTapDeleteButton:
                 return .run { [state = state] send in
@@ -82,14 +79,16 @@ struct DetailItemStore {
                 
             case .deleteCompleted:
                 return .send(.didTapBackButton)
+                
+            default:
+                return .none
             }
+        }
+        .ifLet(\.$editItem, action: \.editItem) {
+            EditItemStore()
         }
     }
     
-    private func editItem(new: Item) throws {
-        try context.edit(new)
-        WidgetCenter.shared.reloadAllTimelines()
-    }
 
     private func deleteItem(_ item: Item) throws {
         try context.delete(item)

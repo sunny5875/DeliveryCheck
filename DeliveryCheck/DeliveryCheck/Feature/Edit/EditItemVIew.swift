@@ -8,37 +8,21 @@
 
 import SwiftUI
 
+import ComposableArchitecture
+
 struct EditItemVIew: View {
-    
-    @Environment(\.modelContext) var modelContext
-    @State private var item: Item
-    
-    var checkNameValid: Bool {
-        item.name.count != 0
-    }
-    var checkTracxkNumberValid: Bool {
-         7..<15 ~= item.trackingNumber.count
-    }
-    var isValid: Bool {
-        checkNameValid && checkTracxkNumberValid
-    }
-    
-    private let onEdit: (Item) -> ()
-    
-    init (item: Item, onEdit: @escaping (Item) -> ()) {
-        self.item = item
-        self.onEdit = onEdit
-    }
+
+    @Bindable var store: StoreOf<EditItemStore>
     
     var body: some View {
         NavigationView {
             Form {
                 Section("물품명") {
-                    TextField("1글자 이상의 물품명을 입력하세요.", text: $item.name)
+                    TextField("1글자 이상의 물품명을 입력하세요.", text: $store.item.name)
                 }
                 
                 Section("배송사") {
-                    Picker(item.carrierCompany, selection: $item.carrierCompany) {
+                    Picker(store.company.name, selection: $store.company) {
                         ForEach(DeliveryCompany.allCases, id: \.self) { item in
                             Text(item.name)
                         }
@@ -46,7 +30,7 @@ struct EditItemVIew: View {
                 }
                 
                 Section("운송장 번호") {
-                    TextField("7~15글자의 운송장번호를 입력하세요", text: $item.trackingNumber)
+                    TextField("7~15글자의 운송장번호를 입력하세요", text: $store.item.trackingNumber)
                 }
                 
             }
@@ -54,17 +38,14 @@ struct EditItemVIew: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        guard isValid else { return }
-                        onEdit(item)
+                        store.send(.didTapConfirmButton)
                     }, label: {
                         Text("완료")
                     })
-                    .disabled(!isValid)
-                    
+                    .disabled(!store.isValid)
                 }
                 
             }
         }
-        
     }
 }

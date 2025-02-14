@@ -56,13 +56,8 @@ struct DetailItemView: View {
                 }
             }
         }
-        .sheet(isPresented: $store.isEdit) {
-            EditItemVIew(
-                item: store.item,
-                onEdit: { new in
-                    store.send(.didTapEditConfirmButton(new))
-                }
-            )
+        .sheet(item: $store.scope(state: \.editItem, action: \.editItem)) { store in
+             EditItemVIew(store: store)
         }
     }
     

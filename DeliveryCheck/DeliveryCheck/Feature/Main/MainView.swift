@@ -157,7 +157,7 @@ struct MainView: View {
                     SectorMark(
                         angle: .value(key, value),
                         innerRadius: .ratio(0.5),
-                        outerRadius: store.selectedKey?.key == key ? 130 : 120,
+                        outerRadius: store.selectedKey?.key == key ? 120 : 110,
                         angularInset: 2
                     )
                     .cornerRadius(8)
@@ -181,7 +181,7 @@ struct MainView: View {
                     }
                     .matchedGeometryEffect(id: "chart", in: namespace)
                 }
-                .frame(height: 300)
+                .frame(height: 250)
             }
         }
     }
