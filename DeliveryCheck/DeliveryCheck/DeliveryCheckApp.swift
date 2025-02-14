@@ -18,7 +18,7 @@ struct DeliveryCheckApp: App {
                 LaunchScreenView()
                     .ignoresSafeArea()
                     .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
                             isSplashView = false
                         }
                     }
@@ -31,7 +31,6 @@ struct DeliveryCheckApp: App {
                 ))
             }
         }
-        .modelContainer(ModelContainer.sharedModelContainer)
     }
 }
 

@@ -34,7 +34,7 @@ struct MainStore {
         case onAppear
         case onAppearCompleted([Item])
         
-        case onChange([(key: String, value: Int)])
+        case onChange(Int?, [(key: String, value: Int)])
         
         case refresh
         case refreshFinish([Item])
@@ -88,9 +88,12 @@ struct MainStore {
                 return .run { [state = state] send in
                     var newItems: [Item] = state.items
                     for i in 0..<newItems.count {
-                        if let newItem = try? await network.fetch(newItems[i]) {
-                            newItems[i] = newItem
-                        }
+                        do {
+                            newItems[i] = try await network.fetch(newItems[i])
+                        } catch CommonError.invalidResponse {
+                            newItems[i].state = "ERROR"
+                            continue
+                        } catch { continue }
                     }
                     await send(.refreshFinish(newItems))
                 }
@@ -136,14 +139,16 @@ struct MainStore {
                 }
                 return .none
                 
-            case let .onChange(dict):
-                guard let value = state.selectedCount
-                else { return .none }
+            case let .onChange(new, dict):
+                guard let new
+                else {
+                    state.selectedKey = .none
+                    return .none
+                }
                 var accumulatedCount = 0
-
                 let item = dict.first { (_, count) in
                     accumulatedCount += count
-                    return value <= accumulatedCount
+                    return new <= accumulatedCount
                 }
                 state.selectedKey = item
                 return .none

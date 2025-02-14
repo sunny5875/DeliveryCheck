@@ -79,6 +79,7 @@
 				Service/Database/Database.swift,
 				Service/Database/DatabaseService.swift,
 				Service/Database/sharedModelContainer.swift,
+				Service/Error.swift,
 				Service/Network/NetworkService.swift,
 				"Utils/String+.swift",
 			);
