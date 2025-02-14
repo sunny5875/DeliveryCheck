@@ -155,26 +155,19 @@ struct MainView: View {
                 
                 Chart(dict, id: \.key) { (key, value) in
                     SectorMark(
-                        angle: .value(
-                            Text(verbatim: key),
-                            value
-                        ),
+                        angle: .value(key, value),
                         innerRadius: .ratio(0.5),
+                        outerRadius: store.selectedKey?.key == key ? 130 : 120,
                         angularInset: 2
                     )
                     .cornerRadius(8)
-                    .foregroundStyle( key.color
-                        .opacity(store.selectedKey == nil || store.selectedKey?.key == key ? 1 : 0.3)
-                    )
-                    .annotation(position: .overlay) {
-                        Text("\(value)개")
-                            .font(.caption)
-                            .foregroundStyle(.white)
-                    }
+                    .foregroundStyle(by: .value("종류", key.statusTitle))
+                    .opacity(store.selectedKey == nil || store.selectedKey?.key == key ? 1 : 0.3)
                 }
+                .chartLegend(.visible)
                 .chartAngleSelection(value: $store.selectedCount)
-                .onChange(of: store.selectedCount) { _, _ in
-                    store.send(.onChange(dict))
+                .onChange(of: store.selectedCount, initial: false) {old, new in
+                    store.send(.onChange(new, dict))
                 }
                 .chartBackground { proxy in
                     VStack(spacing: 2) {
@@ -188,11 +181,7 @@ struct MainView: View {
                     }
                     .matchedGeometryEffect(id: "chart", in: namespace)
                 }
-                .frame(height: 180)
-                
-                
-                Text(dict.map { "\($0.statusTitle)(\($1))"}.joined(separator: " "))
-                    .font(.caption)
+                .frame(height: 300)
             }
         }
     }
