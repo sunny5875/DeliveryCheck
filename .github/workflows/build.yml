@@ -21,6 +21,13 @@ jobs:
     - name: Set Xcode version
       run: sudo xcode-select -switch /Applications/Xcode_16.app
       
+    - name: Cache SPM dependencies
+      uses: actions/cache@v2
+      with:
+          path: ~/.swiftpm
+          key: ${{ runner.os }}-swiftpm-${{ hashFiles('**/Package.swift') }}
+          restore-keys: |
+            ${{ runner.os }}-swiftpm-
     - name: Resolve Dependencies
       run: xcodebuild -resolvePackageDependencies
       working-directory: ./DeliveryCheck
