@@ -1,6 +1,5 @@
 # This workflow will build a Swift project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
-
 name: Build Test
 
 on:
@@ -11,26 +10,40 @@ on:
 
 jobs:
   build:
-
     runs-on: macos-15
 
     steps:
     - name: Checkout Source Code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       
     - name: Set Xcode version
       run: sudo xcode-select -switch /Applications/Xcode_16.app
-      
+
     - name: List available devices
       run: xcrun simctl list devices
-      
+
+    - name: Create and Boot Simulator
+      run: |
+        UDID=$(xcrun simctl create "GitHubActions-iPhone" "iPhone 16")
+        echo "Created Simulator with UDID: $UDID"
+        xcrun simctl boot "$UDID"
+        echo "UDID=$UDID" >> $GITHUB_ENV
+
+    - name: Wait for Simulator to be ready
+      run: xcrun simctl bootstatus ${{ env.UDID }} -b
+
     - name: Resolve Dependencies
       run: xcodebuild -resolvePackageDependencies
       working-directory: ./DeliveryCheck
-      
+
     - name: Create config.xcconfig
       run: echo "${{ secrets.DEBUG_CONFIG }}" > ./DeliveryCheck/config.xcconfig
 
-      
     - name: DeliveryCheck Build Tests
-      run: xcodebuild build -project DeliveryCheck/DeliveryCheck.xcodeproj -scheme DeliveryCheck -destination "platform=iOS Simulator,name=iPhone 16,OS=latest"
+      run: |
+        xcodebuild build \
+          -project DeliveryCheck/DeliveryCheck.xcodeproj \
+          -scheme DeliveryCheck \
+          -destination "platform=iOS Simulator,id=${{ env.UDID }},OS=latest" \
+          CODE_SIGNING_ALLOWED=NO \
+          -disablePackageRepositoryCache
