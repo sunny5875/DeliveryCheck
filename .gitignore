@@ -4,6 +4,7 @@
 
 
 DeliveryCheck/fastlane/.env
+DeliveryCheck/config.xcconfig
 
 ## User settings
 xcuserdata/
