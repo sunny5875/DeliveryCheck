@@ -88,12 +88,13 @@ struct MainStore {
                 return .run { [state = state] send in
                     var newItems: [Item] = state.items
                     for i in 0..<newItems.count {
+                        guard newItems[i].statusCode != 3 else { continue }
                         do {
                             newItems[i] = try await network.fetch(newItems[i])
-                        } catch CommonError.invalidResponse {
-                            newItems[i].state = "ERROR"
+                        } catch {
+                            debugPrint(error.localizedDescription)
                             continue
-                        } catch { continue }
+                        }
                     }
                     await send(.refreshFinish(newItems))
                 }
@@ -106,7 +107,6 @@ struct MainStore {
                     try? context.save()
                     WidgetCenter.shared.reloadAllTimelines()
                 }
-                
                 
             case let .didTapDeleteButton(item):
                 return .run { send in

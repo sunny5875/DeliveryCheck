@@ -20,6 +20,8 @@ struct DetailItemStore {
     struct State: Equatable {
         var isLoading = false
         var item: Item
+        var eventList: [EventDetails] = []
+        var isShowWebView: Bool = false
         
         @Presents var editItem: EditItemStore.State?
         
@@ -35,6 +37,9 @@ struct DetailItemStore {
     enum Action: BindableAction {
         case binding(BindingAction<State>)
         
+        case onAppear
+        case onAppearFinish([EventDetails])
+        
         case didTapBackButton
         
         case didTapEditButton
@@ -42,12 +47,14 @@ struct DetailItemStore {
         case didTapDeleteButton
         case deleteCompleted
         
+        case didTapShowWebView
         
         case editItem(PresentationAction<EditItemStore.Action>)
         
     }
     
     @Dependency(\.swiftData) var context
+    @Dependency(\.network) var network
     
     
     public var body: some ReducerOf<Self> {
@@ -56,6 +63,20 @@ struct DetailItemStore {
         Reduce { state, action in
             switch action {
             case .binding:
+                return .none
+                
+            case .onAppear:
+                return .run { [state = state ] send in
+                    do {
+                        let list = try await network.getAllInfomation(state.item)
+                        await send(.onAppearFinish(list))
+                    } catch {
+                        debugPrint(error.localizedDescription)
+                    }
+                }
+                
+            case .onAppearFinish(let list):
+                state.eventList = list
                 return .none
                 
             case .didTapBackButton:
@@ -79,6 +100,10 @@ struct DetailItemStore {
                 
             case .deleteCompleted:
                 return .send(.didTapBackButton)
+                
+            case .didTapShowWebView:
+                state.isShowWebView.toggle()
+                return .none
                 
             default:
                 return .none

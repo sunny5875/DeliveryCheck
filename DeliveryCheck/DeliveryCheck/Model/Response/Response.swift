@@ -16,13 +16,25 @@ struct TrackData: Codable {
 
 struct TrackDetails: Codable {
     let lastEvent: EventDetails?
+    let events: EventData?
 }
 
-struct EventDetails: Codable {
+struct EventDetails: Codable, Equatable, Hashable {
+    
     let time: String
     let status: StatusDetails
+    let description: String?
 }
 
-struct StatusDetails: Codable {
+struct StatusDetails: Codable, Equatable, Hashable {
     let code: String
+    let name: String?
+}
+
+struct EventData: Codable {
+    let edges: [NodeData]
+}
+
+struct NodeData: Codable {
+    let node: EventDetails
 }
