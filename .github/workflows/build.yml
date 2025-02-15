@@ -21,6 +21,16 @@ jobs:
     - name: Set Xcode version
       run: sudo xcode-select -switch /Applications/Xcode_16.app
       
+    - name: List available devices
+      run: xcrun simctl list devices
+      
+    - name: Resolve Dependencies
+      run: xcodebuild -resolvePackageDependencies
+      working-directory: ./DeliveryCheck
+      
+    - name: Create config.xcconfig
+      run: echo "${{ secrets.DEBUG_CONFIG }}" > ./DeliveryCheck/config.xcconfig
+
       
     - name: DeliveryCheck Build Tests
-      run: xcodebuild build -project DeliveryCheck/DeliveryCheck.xcodeproj -scheme DeliveryCheck -destination "platform=iOS Simulator,name=iPhone 16,OS=latest"
+      run: xcodebuild build -project DeliveryCheck/DeliveryCheck.xcodeproj -scheme DeliveryCheck -destination "platform=iOS Simulator,name=iPhone 14 Pro,OS=latest"
