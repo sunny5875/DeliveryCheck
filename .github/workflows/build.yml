@@ -18,6 +18,9 @@ jobs:
     - name: Checkout Source Code
       uses: actions/checkout@v2
       
+    - name: Set Xcode version
+      run: sudo xcode-select -switch /Applications/Xcode_16.app
+      
     - name: DeliveryCheck Build Tests
       run: |
         xcodebuild clean build -project DeliveryCheck/DeliveryCheck.xcodeproj -scheme DeliveryCheck -destination "platform=iOS Simulator,name=iPhone 16,OS=latest"
