@@ -37,4 +37,4 @@ jobs:
           -scheme DeliveryCheck \
           -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" \
           CODE_SIGNING_ALLOWED=NO \
-          -disablePackageRepositoryCache
+          -disablePackageRepositoryCache -skipMacroValidation
