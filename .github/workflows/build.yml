@@ -21,6 +21,9 @@ jobs:
     - name: Set Xcode version
       run: sudo xcode-select -switch /Applications/Xcode_16.app
       
+    - name: Resolve Dependencies
+      run: xcodebuild -resolvePackageDependencies
+      
     - name: DeliveryCheck Build Tests
       run: |
-        xcodebuild clean build -project DeliveryCheck/DeliveryCheck.xcodeproj -scheme DeliveryCheck -destination "platform=iOS Simulator,name=iPhone 16,OS=latest"
+        xcodebuild build -project DeliveryCheck/DeliveryCheck.xcodeproj -scheme DeliveryCheck -destination "platform=iOS Simulator,name=iPhone 16,OS=latest"
