@@ -33,4 +33,4 @@ jobs:
 
       
     - name: DeliveryCheck Build Tests
-      run: xcodebuild build -project DeliveryCheck/DeliveryCheck.xcodeproj -scheme DeliveryCheck -destination "platform=iOS Simulator,name=iPhone 14 Pro,OS=latest"
+      run: xcodebuild build -project DeliveryCheck/DeliveryCheck.xcodeproj -scheme DeliveryCheck -destination "platform=iOS Simulator,name=iPhone 16,OS=latest"
