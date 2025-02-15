@@ -20,6 +20,6 @@ jobs:
       
     - name: DeliveryCheck Build Tests
       run: |
-        xcodebuild clean build -project ../DeliveryCheck/DeliveryCheck.xcodeproj 
+        xcodebuild clean build -project ./DeliveryCheck/DeliveryCheck.xcodeproj
         -scheme DeliveryCheck 
         -destination "platform=iOS Simulator,name=iPhone 16,OS=latest"
