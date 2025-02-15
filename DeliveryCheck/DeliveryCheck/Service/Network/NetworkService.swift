@@ -78,8 +78,13 @@ extension NetworkService: DependencyKey {
                 }
                 return item
             } catch {
-                debugPrint("Error parsing JSON response: \(error.localizedDescription)")
-                throw CommonError.invalidResponse
+                if let error = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                    item.state = "ERROR"
+                    throw CommonError.invalidResponse
+                } else {
+                    debugPrint("Error parsing JSON response:  \(error.localizedDescription)")
+                    throw CommonError.networkError
+                }
             }
         } else {
             debugPrint("Server responded with error. Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1)")
@@ -155,8 +160,13 @@ extension NetworkService: DependencyKey {
                 }
                 return json.data.track.events?.edges.map { $0.node } ?? []
             } catch {
-                debugPrint("Error parsing JSON response: \(error.localizedDescription)")
-                throw CommonError.invalidResponse
+                if let error = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                    item.state = "ERROR"
+                    throw CommonError.invalidResponse
+                } else {
+                    debugPrint("Error parsing JSON response:  \(error.localizedDescription)")
+                    throw CommonError.networkError
+                }
             }
         } else {
             debugPrint("Server responded with error. Status code: \((response as? HTTPURLResponse)?.statusCode ?? -1)")

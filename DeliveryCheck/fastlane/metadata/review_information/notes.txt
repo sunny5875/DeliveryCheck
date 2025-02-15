@@ -1,0 +1,10 @@
+Our app is an app that tracks delivery inquiries by registering parcel items.
+Currently, we provide delivery information for couriers that are supported by Korea.
+
+Examples of demos to provide are below
+물품명:  Nail, 배송사: CJ대한통운, 운송장번호: 595883574981
+물품명: Jacket,배송사: CJ대한통운, 운송장번호: 587365620286
+물품명: cosmetic, 배송사: CJ대한통운, 운송장번호: 688085888484
+
+if you don't know how to create widget, please watch the video using the link below
+https://exciting-anorak-474.notion.site/12da7cd24813801a8f7dd6fb6bd33da9

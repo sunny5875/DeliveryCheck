@@ -71,7 +71,7 @@ struct DetailItemStore {
                         let list = try await network.getAllInfomation(state.item)
                         await send(.onAppearFinish(list))
                     } catch {
-                        print(error.localizedDescription)
+                        debugPrint(error.localizedDescription)
                     }
                 }
                 

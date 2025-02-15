@@ -91,10 +91,10 @@ struct MainStore {
                         guard newItems[i].statusCode != 3 else { continue }
                         do {
                             newItems[i] = try await network.fetch(newItems[i])
-                        } catch CommonError.invalidResponse {
-                            newItems[i].state = "ERROR"
+                        } catch {
+                            debugPrint(error.localizedDescription)
                             continue
-                        } catch { continue }
+                        }
                     }
                     await send(.refreshFinish(newItems))
                 }

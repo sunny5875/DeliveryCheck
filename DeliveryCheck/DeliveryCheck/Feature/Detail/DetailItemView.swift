@@ -20,6 +20,7 @@ struct DetailItemView: View {
             ScrollView {
                 VStack(spacing: 32) {
                     header
+                        .padding(.top, 16)
                     
                     if store.eventList.isEmpty {
                         Text("아직 배송이 진행되지 않았어요!")
@@ -61,7 +62,10 @@ struct DetailItemView: View {
             }
         }
         .onAppear {
-            store.send(.onAppear)
+            store.send(.onAppear, animation: .default)
+        }
+        .refreshable {
+            store.send(.onAppear, animation: .default)
         }
         .sheet(item: $store.scope(state: \.editItem, action: \.editItem)) { store in
             EditItemVIew(store: store)
@@ -79,8 +83,14 @@ struct DetailItemView: View {
     var header: some View {
         VStack(spacing: 12) {
             Text(store.item.statusTitle)
+                .foregroundStyle(store.item.color)
                 .font(.title)
-                .bold()
+                .fontWeight(.bold)
+                .padding(12)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(store.item.color, lineWidth: 1)
+                }
                 .padding(.vertical, 12)
             
             HStack(spacing: 4) {
@@ -122,8 +132,7 @@ struct DetailItemView: View {
         .padding(.horizontal, 16)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(.blue.opacity(0.03))
-                .shadow(radius: 2)
+                .fill(Color("customBlue"))
         )
         .padding(.horizontal, 20)
         
@@ -131,37 +140,35 @@ struct DetailItemView: View {
     }
     
     func cell(_ item: EventDetails, isLast: Bool) -> some View {
-        VStack {
-            HStack {
-                VStack(spacing: 2) {
-                    
-                    Rectangle()
-                        .frame(width: 1, height: 24)
-                        .foregroundStyle(Color.gray.opacity(0.2))
-                    
-                    Circle()
-                        .frame(width: 8)
-                        .foregroundStyle(isLast ? Color.blue : Color.gray.opacity(0.2))
-                    
-                    Rectangle()
-                        .frame(width: 1, height: 24)
-                        .foregroundStyle(isLast ? Color.blue : Color.gray.opacity(0.2))
-                }
-                Text(formatDateString(item.time) ?? "")
+        HStack {
+            VStack(spacing: 2) {
+                Rectangle()
+                    .frame(width: 1, height: 24)
+                    .foregroundStyle(Color.gray)
+                
+                Circle()
+                    .frame(width: 8)
+                    .foregroundStyle(isLast ? Color.customBlack : Color.gray)
+                
+                Rectangle()
+                    .frame(width: 1, height: 24)
+                    .foregroundStyle(isLast ? Color.customBlack : Color.gray)
+            }
+            Text(formatDateString(item.time) ?? "")
+                .font(.caption)
+                .bold()
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(item.status.name ?? "-")
                     .font(.caption)
                     .bold()
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(item.status.name ?? "-")
-                        .font(.caption)
-                        .bold()
-                    Text(item.description ?? "-")
-                        .font(.caption)
-                }
-                Spacer()
+                Text(item.description ?? "-")
+                    .font(.caption)
             }
-            
-            
+            Spacer()
         }
+        .opacity(isLast ? 1 : 0.3)
+        
     }
     
     
