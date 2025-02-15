@@ -23,7 +23,7 @@ jobs:
       
     - name: Resolve Dependencies
       run: xcodebuild -resolvePackageDependencies
+      working-directory: ./DeliveryCheck
       
     - name: DeliveryCheck Build Tests
-      run: |
-        xcodebuild build -project DeliveryCheck/DeliveryCheck.xcodeproj -scheme DeliveryCheck -destination "platform=iOS Simulator,name=iPhone 16,OS=latest"
+      run: xcodebuild build -project DeliveryCheck/DeliveryCheck.xcodeproj -scheme DeliveryCheck -destination "platform=iOS Simulator,name=iPhone 16,OS=latest"
