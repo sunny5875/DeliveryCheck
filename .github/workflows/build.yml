@@ -33,7 +33,11 @@ jobs:
       run: xcrun simctl bootstatus ${{ env.UDID }} -b
 
     - name: Resolve Dependencies
-      run: xcodebuild -resolvePackageDependencies
+      run: |
+        rm -rf ~/Library/Developer/Xcode/DerivedData
+        rm -rf ~/Library/Caches/org.swift.swiftpm
+        rm -rf .swiftpm
+        xcodebuild -resolvePackageDependencies
       working-directory: ./DeliveryCheck
 
     - name: Create config.xcconfig
