@@ -21,19 +21,6 @@ jobs:
     - name: Set Xcode version
       run: sudo xcode-select -switch /Applications/Xcode_16.app
       
-    - name: Cache SPM dependencies
-      uses: actions/cache@v3
-      with:
-          path: ~/.swiftpm
-          key: ${{ runner.os }}-swiftpm-${{ hashFiles('**/Package.swift') }}
-          restore-keys: |
-            ${{ runner.os }}-swiftpm-
-    - name: Set IgnoreFileSystemDeviceInodeChanges flag
-      run: defaults write com.apple.dt.XCBuild IgnoreFileSystemDeviceInodeChanges -bool YES
-        
-    - name: Resolve Dependencies
-      run: xcodebuild -resolvePackageDependencies
-      working-directory: ./DeliveryCheck
       
     - name: DeliveryCheck Build Tests
       run: xcodebuild build -project DeliveryCheck/DeliveryCheck.xcodeproj -scheme DeliveryCheck -destination "platform=iOS Simulator,name=iPhone 16,OS=latest"
